@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Implementation-Title: Scala-Spark
+Implementation-Version: 1.0
+main-class: com.myscala.spark.HdfsTest
+

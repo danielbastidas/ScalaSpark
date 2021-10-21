@@ -1,0 +1,47 @@
+plugins {
+    id 'scala'
+
+    id 'java-library'
+}
+
+apply plugin: 'scala'
+
+configurations {
+    provided
+}
+
+sourceSets {
+    main { compileClasspath += configurations.provided }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ScalaCompileOptions.metaClass.daemonServer = true
+ScalaCompileOptions.metaClass.fork = true
+ScalaCompileOptions.metaClass.useAnt = false
+ScalaCompileOptions.metaClass.useCompileDaemon = false
+
+dependencies {
+    provided 'org.apache.spark:spark-core_2.12:3.1.2'
+    provided 'org.apache.spark:spark-sql_2.12:3.1.2'
+    provided 'org.scala-lang:scala-library:2.12.10'
+    //implementation 'org.scala-lang:scala-reflect:2.12.10'
+
+}
+
+version = '1.0'
+
+tasks.jar {
+    manifest {
+        attributes('Implementation-Title': 'Scala-Spark',
+                'Implementation-Version': project.version,
+                'main-class': 'com.myscala.spark.HdfsTest'
+        )
+    }
+    duplicatesStrategy = 'include'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
